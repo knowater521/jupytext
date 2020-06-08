@@ -961,10 +961,8 @@ def test_set_format_with_subfolder(tmpdir):
 # A short notebook
 """
 
-    tmpdir.mkdir("python_scripts")
-
     with open(
-        str(tmpdir.join("python_scripts").join("01_tabular_data_exploration.py")), "w"
+        str(tmpdir.mkdir("python_scripts").join("01_tabular_data_exploration.py")), "w"
     ) as fp:
         fp.write(py)
 
@@ -974,6 +972,26 @@ def test_set_format_with_subfolder(tmpdir):
             "--set-formats",
             "python_scripts//py:percent,notebooks//ipynb",
             "python_scripts/01_tabular_data_exploration.py",
+        ]
+    )
+
+
+def test_set_format_with_subfolder_rmd(tmpdir):
+    """Here we reproduce issue #541"""
+    text = """A short notebook
+"""
+
+    with open(
+        str(tmpdir.mkdir("markdown").join("01_tabular_data_exploration.Rmd")), "w"
+    ) as fp:
+        fp.write(text)
+
+    os.chdir(str(tmpdir))
+    jupytext(
+        [
+            "--set-formats",
+            "markdown//Rmd,notebooks//ipynb",
+            "markdown/01_tabular_data_exploration.Rmd",
         ]
     )
 
